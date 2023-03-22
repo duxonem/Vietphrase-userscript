@@ -3,7 +3,7 @@ Copy lưu lại từ https://voz.vn/t/tong-hop-nhung-addon-chat-cho-firefox-pc-m
 
 Userscript để convert VietPhrase ngay trên trình duyệt thông qua Tampermonkey, Greasemonkey, Firemonkey... và một số con khỉ khác có cùng chức năng.
 
-Vietphrase Translate.user.js là file userscript, trong đó phần header có 2 dòng trỏ tới các file PhienAm, Names và VietPhrase có dạng
+Vietphrase Translate.user.js là file userscript, trong đó phần header có 3 dòng trỏ tới các file PhienAm, Names và VietPhrase có dạng
 @require  https://đuongdantoifileDictionary
 
 Các file PhienAm, Names, Vietphrase là các file có dạng
@@ -14,3 +14,6 @@ const Names = {
 "TentiengTau3":"TentiengAnh3"};
 
 Do định dạng nó khác file từ điển hay dùng của Quick Translation nên có script convertDict 
+
+SAu khi chạy thành công, sẽ hiện 1 nút ở goc trên bên phải. Sau khi mở trang tiếng Trung, muốn chuyển qua dạng Vietphrase đọc đươc nthif nhấn nút trên
+![image](https://user-images.githubusercontent.com/128269506/226879528-99b43031-a266-4e19-b2cf-c437e5c25d57.png)
