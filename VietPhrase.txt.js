@@ -1,5 +1,4 @@
-const VietPhrase = {
-"﻿﻿煮熟的鸭子长了翅膀就这么飞了": "con vịt nấu chín lại mọc cánh bay đi",
+  const VietPhrase = {
 "用其人之道还至其人之身": "gậy ông đập lưng ông",
 "一佛出世, 二佛升天": "~chết đi sống lại",
 "不是什么人都受得住的": "không phải ai cũng chịu nổi",
@@ -33175,4 +33174,4 @@ const VietPhrase = {
 "谁": "ai",
 "拧开": "vặn ra",
 "瓶盖": "nắp bình",
-"承载": "chở; mang"};
+"承载": "chở; mang" };
