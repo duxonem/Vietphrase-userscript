@@ -9,8 +9,8 @@
 // @grant        none
 // @run-at       document-idle
 // @require      https://pastebin.com/raw/rSq6D6V9
-// @require      https://pastebin.com/raw/7euNQrc3
-// @require      https://pastebin.com/raw/cr28ykW5
+// @require      https://raw.githubusercontent.com/duxonem/Vietphrase-userscript/main/Names.txt
+// @require      https://raw.githubusercontent.com/duxonem/aaaaaaa/main/VietPhrase.txt.js
 // ==/UserScript==
 
 // Names dang bi loi. Nguyen nhan do dung dau '', thay bang "". Do 1 so ten co dang O'Neil, bao bang '' se thanh 'O'neil', nen doi thanh "O'Neil"
