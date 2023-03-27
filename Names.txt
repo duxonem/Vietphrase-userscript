@@ -1,4 +1,4 @@
-const Names = {
+  const Names = {
 "乌特拉夫斯基": "Utravsky",
 "克蕾奥帕特拉": "Cleopatra",
 "卢米安. 李": "Lumian.Lee",
@@ -886,4 +886,4 @@ const Names = {
 "马锡": "Masin",
 "高卢": "Gaul",
 "鲁恩": "Loen",
-"黛安": "Diane"};
+"黛安": "Diane" };
