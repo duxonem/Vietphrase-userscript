@@ -4,7 +4,7 @@ https://voz.vn/t/tong-hop-nhung-addon-chat-cho-firefox-pc-mobile.682181/post-240
 
 https://voz.vn/t/tong-hop-nhung-addon-chat-cho-firefox-pc-mobile.682181/post-24088744.
 
-Đây là Userscript để convert VietPhrase ngay trên trình duyệt thông qua các addon/extension như Tampermonkey, Greasemonkey, Firemonkey... và một số con khỉ khác có cùng chức năng.
+Đây là Userscript để convert VietPhrase ngay trên trình duyệt thông qua các addon/extension như Tampermonkey, Greasemonkey, Firemonkey... 
 
 Vietphrase Translate.user.js là file userscript, trong đó phần header có 3 dòng trỏ tới các file PhienAm, Names và VietPhrase có dạng
 
@@ -14,7 +14,7 @@ Vietphrase Translate.user.js là file userscript, trong đó phần header có 3
 
 // @require      https://pastebin.com/raw/cr28ykW5
 
-Các file trên lần lượt là PhienAm, Vietphrase, Names là các file có dạng
+Các file trên lần lượt là PhienAm, VietPhrase, Names là các file có dạng
 
 const Names = {
 "TentiengTau1":"TentiengAnh1",
