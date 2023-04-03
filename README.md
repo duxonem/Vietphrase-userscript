@@ -6,6 +6,11 @@ https://voz.vn/t/tong-hop-nhung-addon-chat-cho-firefox-pc-mobile.682181/post-240
 
 Đây là Userscript để convert VietPhrase ngay trên trình duyệt thông qua các addon/extension như Tampermonkey, Greasemonkey, Firemonkey... 
 
+# Cài đặt
+Sau khi trình duyệt đã cài Tampermonkey/Firemonkey... bấm vào link dưới đây
+https://github.com/duxonem/Vietphrase-userscript/raw/main/Vietphrase%20Translate.user.js
+
+
 Vietphrase Translate.user.js là file userscript, trong đó phần header có 3 dòng trỏ tới các file PhienAm, Names và VietPhrase có dạng
 
 // @require      https://pastebin.com/raw/rSq6D6V9
