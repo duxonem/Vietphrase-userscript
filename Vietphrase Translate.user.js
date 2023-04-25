@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Vietphrase Translate
 // @namespace    VP
-// @version      0.1
+// @version      0.101
 // @description  try to take over the world!
 // @author       You
 // @match        http*://*/*
@@ -13,9 +13,89 @@
 // @require      https://raw.githubusercontent.com/duxonem/Vietphrase-userscript/main/VietPhrase.txt.js
 // ==/UserScript==
 
-function htmlEntities(str) { return String(str).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'","&#39;");}
-String.prototype.count=function(search) {return this.split(search).length-1;}
+function htmlEntities(str) { return String(str).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'","&#39;");}String.prototype.count=function(search) {return this.split(search).length-1;}
+function isLetter(str) { return str.length == 1 && str.match(/[0-9a-z]/i); }
+function isChineseLetter(str) {return str.length==1 && str.match(/[\u4E00-\u9FA5]/)}
+
 let translateCount=0;
+
+function translateByOrder(text,bracket=true) {
+            let result = [], tmpArr={};
+
+            let Name;
+            let Han=Object.keys(Names);
+            Han.sort((a,b) => (b.length -a.length));
+            let maxLength=Han[0].length;
+
+            for (let i=0; i<text.length; i++) {
+                if (text.charAt(i) == '\u0528') continue;
+                for (let j=maxLength; j>1;j--) {
+                    let HanViet=Names[text.substring(i,(i+j))];
+                    if (HanViet == undefined) continue;
+                        tmpArr.pos=i;
+                        tmpArr.orgText=text.substring(i,i+j);
+                        tmpArr.transText=HanViet;
+                        tmpArr.dict='Names';
+                        result.push(tmpArr);
+
+                        text=text.replace(tmpArr.orgText,'\u0528'.repeat(tmpArr.orgText.length))
+                        i+=tmpArr.orgText.length-1;
+                        tmpArr={};
+                }
+            }//end for
+
+            Han=Object.keys(VietPhrase);
+            Han.sort((a,b) => (b.length -a.length));
+            maxLength=Han[0].length;
+
+            for (let i=0; i<text.length; i++) {
+                if (text.charAt(i) == '\u0528') continue;
+                for (let j=maxLength; j>1; j-- ) {
+                    let HanViet=VietPhrase[text.substring(i,(i+j))];
+                    if (HanViet == undefined) continue;
+                        tmpArr.pos=i;
+                        tmpArr.orgText=text.substring(i,i+j);
+                        tmpArr.transText=HanViet;
+                        tmpArr.dict='VP';
+                        result.push(tmpArr);
+
+                        text=text.replace(tmpArr.orgText,'\u0528'.repeat(tmpArr.orgText.length))
+                        i+=tmpArr.orgText.length-1;
+                        tmpArr={}; // must create new object, the existing one is just pushed in to result by reference
+                }
+            }//end for
+
+
+            //convert PhienAm
+            for (let i=0; i<text.length; i++) {
+                let char=text.charAt(i);
+                if (char=='\u0528') continue; //bo mat khoang trang giua 2 chu, pahi thay lai. Chi xay ra khi chay tren cac ky tu kophai tieng trung quoc do tieng tq viet lien
+
+                while (text.indexOf(char) >=0 ) {
+                    tmpArr.pos=text.indexOf(char);
+                    tmpArr.orgText=char;
+                    tmpArr.transText=PhienAm[char];
+                    if (tmpArr.transText == undefined) tmpArr.transText=tmpArr.orgText;
+                    tmpArr.dict='PhienAm';
+                    result.push(tmpArr);
+                    text=text.replace(char,'\u0528');
+                    tmpArr={}; // must create new object
+                }
+            } //end for
+
+            //result=[...new Set(result)];
+            result.sort((a,b) => (a.pos -b.pos));
+
+            let returnText='';
+            for (let i=0;i<result.length; i++) {
+                if (bracket && result[i].dict=='VP') returnText+='['+ result[i].transText + '] ';
+                else if (isChineseLetter(result[i].orgText)) returnText+=result[i].transText + ' ';
+                else returnText+=result[i].transText; }
+
+            translateCount++;
+            return returnText;
+        }
+
 
 function translate(text, dict,brackets=false,safe=false) {
     let Viet='';
@@ -50,19 +130,12 @@ function translateNode(domNode) {
 if (!domNode) return;
 
       if (domNode.nodeType == 3) {
-        domNode.nodeValue = translate(domNode.nodeValue,Names);
-        domNode.nodeValue = translate(domNode.nodeValue,VietPhrase,true);
-        domNode.nodeValue = translate(domNode.nodeValue,PhienAm);
-        //domNode.setAttribute("word-wrap","break-word");  // khong work
-        //domNode.style.wordBreak="break-word";  // khong work
+        domNode.nodeValue = translateByOrder(domNode.nodeValue);
         return; }
 
       if (domNode.nodeType != 1) return;
-
       if (domNode.tagName && ',OBJECT,FRAME,FRAMESET,IFRAME,SCRIPT,EMBD,STYLE,BR,HR,TEXTAREA,'.indexOf(',' + domNode.tagName.toUpperCase() + ',') > - 1) return;
-
       //if (domNode.title)      domNode.title = translate(domNode.title,PhienAm);
-
       //if (domNode.alt)        domNode.alt = translate(domNode.alt,PhienAm);
 
       if (domNode.tagName && domNode.type && domNode.tagName.toUpperCase() == 'INPUT' && ',button,submit,reset,'.indexOf(domNode.type.toLowerCase()) > - 1)
@@ -71,20 +144,23 @@ if (!domNode) return;
       for (var i = 0, j = domNode.childNodes.length; i < j; i++) translateNode(domNode.childNodes[i]);
 }
 
-
 (function() {
     'use strict';
 
     let mouseClick2 = function () {
+        console.time('Translate 2');
         document.title= translate(document.title,PhienAm);
         translateNode(document.body);
+        console.timeEnd('Translate 2');
         console.log(translateCount);}
 
     let mouseClick1= function () {
+        console.time('Translate 1');
         document.title= translate(document.title,PhienAm);
         document.body.innerHTML= translate(document.body.innerHTML,Names); //Names dat trong file require o header
         document.body.innerHTML= translate(document.body.innerHTML,VietPhrase,true,true); //VietPhrase dat trong file require o header, ghi ra co []
         document.body.innerHTML= translate(document.body.innerHTML,PhienAm); //PhienAm dat trong file require o header
+        console.timeEnd('Translate 1');
         console.log(translateCount);}
 
     const transButton=document.createElement("div");
@@ -103,6 +179,4 @@ if (!domNode) return;
     transButton.appendChild(button2);
 
     document.body.appendChild(transButton);
-
-
 })();
