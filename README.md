@@ -39,7 +39,7 @@ Vì các file từ điển trên nhúng dưới dạng code js (@require), để
 
 Do định dạng nó khác file từ điển hay dùng của Quick Translation nên có script convertDict (convertDict.js hoặc convertDict.py). Sau khi có file từ diển đúng định dạng, tải lên 1 dịch vụ cho phép truy cập raw như pastebin hoặc github này. Pastebin bị hạn chế kích thước (500KB). 
 
-Sau khi chạy thành công, sẽ hiện 1 nút ở góc trên bên phải. Sau khi mở trang tiếng Trung, muốn chuyển qua dạng Vietphrase đọc đươc thì nhấn phần nút bên trái, nhấn bên phải sẽ chạy chậm hơn rất nhiều (chạy function translate 2000-5000 lần so với 4 lần của phía bên trái).  
+Sau khi chạy thành công, sẽ hiện 1 nút ở góc trên bên phải. Sau khi mở trang tiếng Trung, muốn chuyển qua dạng Vietphrase đọc đươc thì nhấn phần nút bên trái, nhấn bên phải để chạy kiểu khác.  
 
 Đây là hình ví dụ trên PC
 ![image](https://user-images.githubusercontent.com/128269506/226879528-99b43031-a266-4e19-b2cf-c437e5c25d57.png)
