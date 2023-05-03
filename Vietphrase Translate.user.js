@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Vietphrase Translate
 // @namespace    VP
-// @version      0.101
+// @version      0.1
 // @description  try to take over the world!
 // @author       You
 // @match        http*://*/*
@@ -19,7 +19,7 @@ function isChineseLetter(str) {return str.length==1 && str.match(/[\u4E00-\u9FA5
 
 let translateCount=0;
 
-function translateByOrder(text,bracket=true) {
+function translateByLength(text,bracket=true) {  //no use now, leave it here to check function translate if needed
             let result = [], tmpArr={};
 
             let Name;
@@ -28,7 +28,7 @@ function translateByOrder(text,bracket=true) {
             let maxLength=Han[0].length;
 
             for (let i=0; i<text.length; i++) {
-                if (text.charAt(i) == '\u0528') continue;
+                if (text.charAt(i) == '\u0528') continue;  //break for
                 for (let j=maxLength; j>1;j--) {
                     let HanViet=Names[text.substring(i,(i+j))];
                     if (HanViet == undefined) continue;
@@ -41,7 +41,7 @@ function translateByOrder(text,bracket=true) {
                         text=text.replace(tmpArr.orgText,'\u0528'.repeat(tmpArr.orgText.length))
                         i+=tmpArr.orgText.length-1;
                         tmpArr={};
-                }
+                } //end for
             }//end for
 
             Han=Object.keys(VietPhrase);
@@ -61,26 +61,28 @@ function translateByOrder(text,bracket=true) {
 
                         text=text.replace(tmpArr.orgText,'\u0528'.repeat(tmpArr.orgText.length))
                         i+=tmpArr.orgText.length-1;
-                        tmpArr={}; // must create new object, the existing one is just pushed in to result by reference
-                }
+                        tmpArr={}; // must create new object, the existing one is just pushed in to result[] by reference
+                } //end for
             }//end for
 
 
             //convert PhienAm
             for (let i=0; i<text.length; i++) {
                 let char=text.charAt(i);
-                if (char=='\u0528') continue; //bo mat khoang trang giua 2 chu, pahi thay lai. Chi xay ra khi chay tren cac ky tu kophai tieng trung quoc do tieng tq viet lien
+                if (char=='\u0528') continue; 
 
                 while (text.indexOf(char) >=0 ) {
                     tmpArr.pos=text.indexOf(char);
                     tmpArr.orgText=char;
                     tmpArr.transText=PhienAm[char];
-                    if (tmpArr.transText == undefined) tmpArr.transText=tmpArr.orgText;
                     tmpArr.dict='PhienAm';
+                    if (tmpArr.transText == undefined) {
+                        tmpArr.transText=tmpArr.orgText;
+                        tmpArr.dict='FA'; }
                     result.push(tmpArr);
                     text=text.replace(char,'\u0528');
                     tmpArr={}; // must create new object
-                }
+                } //end while
             } //end for
 
             //result=[...new Set(result)];
@@ -110,6 +112,7 @@ function translate(text, dict,brackets=false,safe=false) {
     } //End for
 
     let pointAtEnd=false;
+    
     if (text.charAt(text.length-1)=='。') pointAtEnd=true;
 
     let lines=text.split('。');
@@ -127,22 +130,30 @@ function translate(text, dict,brackets=false,safe=false) {
 } //End function
 
 function translateNode(domNode) {
-if (!domNode) return;
+    let stackToStockThings=[];
 
-      if (domNode.nodeType == 3) {
-        domNode.nodeValue = translateByOrder(domNode.nodeValue);
-        return; }
+    function Imtired (domNode) {
+        if (!domNode) return;
+        if (domNode.nodeType == 3) { stackToStockThings.push(domNode); return; }
 
-      if (domNode.nodeType != 1) return;
-      if (domNode.tagName && ',OBJECT,FRAME,FRAMESET,IFRAME,SCRIPT,EMBD,STYLE,BR,HR,TEXTAREA,'.indexOf(',' + domNode.tagName.toUpperCase() + ',') > - 1) return;
-      //if (domNode.title)      domNode.title = translate(domNode.title,PhienAm);
-      //if (domNode.alt)        domNode.alt = translate(domNode.alt,PhienAm);
+        if (domNode.nodeType != 1) return;
+        if (domNode.tagName && ',OBJECT,FRAME,FRAMESET,IFRAME,SCRIPT,EMBD,STYLE,BR,HR,TEXTAREA,'.indexOf(',' + domNode.tagName.toUpperCase() + ',') > - 1) return;
+        if (domNode.tagName && domNode.type && domNode.tagName.toUpperCase() == 'INPUT' && ',button,submit,reset,'.indexOf(domNode.type.toLowerCase()) > - 1)  stackToStockThings.push(domNode);
 
-      if (domNode.tagName && domNode.type && domNode.tagName.toUpperCase() == 'INPUT' && ',button,submit,reset,'.indexOf(domNode.type.toLowerCase()) > - 1)
-        domNode.value = translate(domNode.value,PhienAm);
+        for (var i = 0, j = domNode.childNodes.length; i < j; i++) Imtired(domNode.childNodes[i]);
+    } //End function Imtired
 
-      for (var i = 0, j = domNode.childNodes.length; i < j; i++) translateNode(domNode.childNodes[i]);
+    Imtired(domNode);
+    let text='', tmpArr=[];
+    for (let i=0; i<stackToStockThings.length; i++) text+=stackToStockThings[i].nodeValue + 'Thisismyprivatepart';
+    //text=translateByLength(text);
+    text=translate(text,Names,false);
+    text=translate(text,VietPhrase,true);
+    text=translate(text,PhienAm,false);
+    tmpArr=text.split('Thisismyprivatepart');
+    for (let i=0; i<stackToStockThings.length; i++) stackToStockThings[i].nodeValue=tmpArr[i];
 }
+
 
 (function() {
     'use strict';
@@ -179,4 +190,6 @@ if (!domNode) return;
     transButton.appendChild(button2);
 
     document.body.appendChild(transButton);
+
+
 })();
