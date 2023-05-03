@@ -146,10 +146,10 @@ function translateNode(domNode) {
     Imtired(domNode);
     let text='', tmpArr=[];
     for (let i=0; i<stackToStockThings.length; i++) text+=stackToStockThings[i].nodeValue + 'Thisismyprivatepart';
-    //text=translateByLength(text);
-    text=translate(text,Names,false);
-    text=translate(text,VietPhrase,true);
-    text=translate(text,PhienAm,false);
+    text=translateByLength(text);
+    //text=translate(text,Names,false);
+    //text=translate(text,VietPhrase,true);
+    //text=translate(text,PhienAm,false);
     tmpArr=text.split('Thisismyprivatepart');
     for (let i=0; i<stackToStockThings.length; i++) stackToStockThings[i].nodeValue=tmpArr[i];
 }
