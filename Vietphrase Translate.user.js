@@ -179,13 +179,13 @@ function translateNode(domNode) {
 
     const button1=document.createElement("button");
     button1.innerText="Tran";
-    button1.style= "width:50%; height:90%; top: 0; left: 0; position:absolute; border: none; text-align:right; padding:1px;";
+    button1.style= "width:50%; height:90%; top: 0; left: 0; position:absolute; border: none; text-align:right; padding:0px; margin: 0px;";
     button1.onclick=mouseClick1;
     transButton.appendChild(button1);
 
     const button2=document.createElement("button");
     button2.innerText="slate";
-    button2.style= "width:50%; height:90%; top: 0; right: 0; position:absolute; border: none; text-align:left; padding:1px;";
+    button2.style= "width:50%; height:90%; top: 0; right: 0; position:absolute; border: none; text-align:left; padding:0px; margin: 0px;";
     button2.onclick=mouseClick2;
     transButton.appendChild(button2);
 
