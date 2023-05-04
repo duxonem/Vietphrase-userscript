@@ -19,7 +19,7 @@ function isChineseLetter(str) {return str.length==1 && str.match(/[\u4E00-\u9FA5
 
 let translateCount=0;
 
-function translateByLength(text,bracket=true) {  //no use now, leave it here to check function translate if needed
+function translateByOrder(text,bracket=true) {  //no use now, leave it here to check function translate if needed
             let result = [], tmpArr={};
 
             let Name;
@@ -145,12 +145,12 @@ function translateNode(domNode) {
 
     Imtired(domNode);
     let text='', tmpArr=[];
-    for (let i=0; i<stackToStockThings.length; i++) text+=stackToStockThings[i].nodeValue + 'Thisismyprivatepart';
-    text=translateByLength(text);
+    for (let i=0; i<stackToStockThings.length; i++) text+=stackToStockThings[i].nodeValue + '\uf0f3'.repeat(3); //repeat 3 takes longer than repeat 2 ~~10%
+    text=translateByOrder(text);
     //text=translate(text,Names,false);
     //text=translate(text,VietPhrase,true);
     //text=translate(text,PhienAm,false);
-    tmpArr=text.split('Thisismyprivatepart');
+    tmpArr=text.split('\uf0f3'.repeat(3));
     for (let i=0; i<stackToStockThings.length; i++) stackToStockThings[i].nodeValue=tmpArr[i];
 }
 
