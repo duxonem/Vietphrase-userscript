@@ -145,12 +145,12 @@ function translateNode(domNode) {
 
     Imtired(domNode);
     let text='', tmpArr=[];
-    for (let i=0; i<stackToStockThings.length; i++) text+=stackToStockThings[i].nodeValue + '\uf0f3'.repeat(3); //repeat 3 takes longer than repeat 2 ~~10%
+    for (let i=0; i<stackToStockThings.length; i++) text+=stackToStockThings[i].nodeValue + '\uf0f3'.repeat(1); //repeat 3 takes longer than repeat 2 ~~10%
     text=translateByOrder(text);
     //text=translate(text,Names,false);
     //text=translate(text,VietPhrase,true);
     //text=translate(text,PhienAm,false);
-    tmpArr=text.split('\uf0f3'.repeat(3));
+    tmpArr=text.split('\uf0f3'.repeat(1));
     for (let i=0; i<stackToStockThings.length; i++) stackToStockThings[i].nodeValue=tmpArr[i];
 }
 
