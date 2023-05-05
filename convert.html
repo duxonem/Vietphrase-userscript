@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script>
+            function htmlEntities(str) {return String(str).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'",'&#39');}
+            let rawDict='';
+            let dictFile = new FileReader();
+            dictFile.onload = function (event) {
+                rawDict=String(event.target.result);
+                lines=rawDict.split("\n");
+
+                for (i=0; i<lines.length-1; i++) 
+                    lines[i]='"'+htmlEntities(lines[i].trim()).replace('=','":"') + '"';
+                let dictName=document.getElementById('dictFile').files[0].name.split('.')[0];
+                rawDict= 'const '+ dictName + ' = {\n'  + lines.join(',\n') + '}; \n';
+                document.getElementById('convertDict').innerText=rawDict; 
+            }
+            
+        </script>
+    </head>
+    <body>
+        <input type="file" id="dictFile" onchange="dictFile.readAsText(document.getElementById('dictFile').files[0])">
+        <div id="convertDict" style="border-top: 2px solid;"></div>
+    </body>
+</html>
