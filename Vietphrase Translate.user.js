@@ -84,7 +84,7 @@ function translateByOrder(text,safe=true) {
 
 
             let dichlieuArr =['的','了','著'];
-            if (Options.Xoadichlieutru) dichlieuArr.forEach(word => text.replaceAll(word,''));
+            if (Options.Xoadichlieutru) dichlieuArr.forEach(word => text=text.replaceAll(word,'\u0528'));
             //convert PhienAm
             for (let i=0; i<text.length; i++) {
                 let char=text.charAt(i);
@@ -129,7 +129,7 @@ function translate(text, dict,safe=true) {
 
         if (Options.Xoadichlieutru &&dict=='PhienAm') {
             let dichlieuArr =['的','了','著'];
-            dichlieuArr.foreach(word => text.replaceAll(word,'')); }
+            dichlieuArr.foreach(word => text=text.replaceAll(word,'')); }
 
         if (Options.Ngoac && dict==VietPhrase) text=text.replaceAll(Han,'['+Viet+'] ');
         else text=text.replaceAll(Han,Viet+' ');
