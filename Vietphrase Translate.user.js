@@ -189,6 +189,7 @@ function translateNode(domNode) {
         console.time('Translate 2');
         document.title= translate(document.title,PhienAm);
         translateNode(document.body);
+        document.body.style.fontFamily = `arial,sans-serif;`
         console.timeEnd('Translate 2');
         console.log(translateCount);}
 
@@ -198,6 +199,7 @@ function translateNode(domNode) {
         document.body.innerHTML= translate(document.body.innerHTML,Names); //Names dat trong file require o header
         document.body.innerHTML= translate(document.body.innerHTML,VietPhrase); //VietPhrase dat trong file require o header, ghi ra co []
         document.body.innerHTML= translate(document.body.innerHTML,PhienAm); //PhienAm dat trong file require o header
+        document.body.style.fontFamily = `arial,sans-serif;`
         console.timeEnd('Translate 1');
         console.log(translateCount);}
 
