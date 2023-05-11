@@ -15,7 +15,7 @@ if (__filename == dataFile) {
 const fs = require('fs');
 const dataFileContents = fs.readFileSync(dataFile);
 
-let lines = dataFileContents.toString().split('\r\n');
+let lines = dataFileContents.toString().trim().split('\r\n');
 for (let i=0; i<lines.length-1; i++) lines[i]='"'+htmlEntities(lines[i].trim()).replace('=','":"') + '"';
 
 let dictName = dataFile.split('/'); // split('\) neu o Windows
