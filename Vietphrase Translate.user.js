@@ -16,10 +16,6 @@
 // ==/UserScript==
 
 // Option
-const Ngoac=false;         //dau ngoac bao quanh VietPhrase
-const VPmotnghia=true;    // neu VP co nhieu nghia, chi lay nghia dau tien
-const Daucachnghia=';';    //dau cach cac nghia trong cung Entry VP
-const Xoadichlieutru=true; //Xoa dich, lieu, tru
 let Options = {
     Ngoac:false,
     VPmotnghia:true,
