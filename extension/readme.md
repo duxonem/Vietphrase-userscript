@@ -7,7 +7,7 @@ Trong đó nếu cụm từ đầu hoặc cuối đứng ngoài cùng có thể 
 
 ## Cài đặt
 
-Tải file .xpi về vào phần quản lý extension chọn Install Addon from File...
+(https://addons.mozilla.org/addon/vietphrase-extension/)
 
 Sau đó vào Option để cài đặt các thiết lập và tải các từ điển lên rồi bấm nút Lưu.
 
