@@ -1,8 +1,5 @@
 # Vietphrase userscript
-Đây là Userscript để convert VietPhrase ngay trên trình duyệt thông qua các addon/extension như Tampermonkey, Greasemonkey, Firemonkey... Copy lưu lại từ 
-https://voz.vn/t/tong-hop-nhung-addon-chat-cho-firefox-pc-mobile.682181/post-24087965 và 
-https://voz.vn/t/tong-hop-nhung-addon-chat-cho-firefox-pc-mobile.682181/post-24088744.
-
+Đây là Userscript để convert VietPhrase ngay trên trình duyệt thông qua các addon/extension như Tampermonkey, Greasemonkey, Firemonkey...Để dùng extension của trình duyệt với dữ liệu nằm trên máy thì vào folder extension.
 
 ### Cài đặt
 Sau khi trình duyệt đã cài extension Tampermonkey/Firemonkey... bấm vào link dưới đây
@@ -37,7 +34,7 @@ File PhienAm đã đầy đủ không cần thay thế. VietPhrase và Names có
 
 Vì các file từ điển trên nhúng dưới dạng code js (@require), để an toàn bạn nên dùng file của chính mình tự up lên 1 host nào đó; không sợ bị người khác thay bằng code js mà bạn không biết.
 
-Do định dạng nó khác file từ điển hay dùng của Quick Translation nên có script convertDict (convertDict.js dùng với dòng lệnh nodejs, convertDict.py dùng với python từ dòng lệnh hoặc convert.html với trình duyệt). Sau khi có file từ diển đúng định dạng, tải lên 1 dịch vụ cho phép truy cập raw như pastebin hoặc github này. Pastebin bị hạn chế kích thước (500KB). 
+Do định dạng nó khác file từ điển hay dùng của Quick Translation nên có script convertDict (convertDict.js dùng với dòng lệnh nodejs, convertDict.py dùng với python từ dòng lệnh hoặc convert.html với trình duyệt). Sau khi có file từ diển đúng định dạng, tải lên 1 dịch vụ cho phép truy cập raw như pastebin hoặc github này. Pastebin bị hạn chế kích thước (500KB). Ở Vn hiện không truy cập pastebin được.
 
 Sau khi chạy thành công, sẽ hiện 1 nút ở góc trên bên phải. Sau khi mở trang tiếng Trung, muốn chuyển qua dạng Vietphrase đọc đươc thì nhấn phần nút bên trái, nhấn bên phải để chạy kiểu khác.  
 
