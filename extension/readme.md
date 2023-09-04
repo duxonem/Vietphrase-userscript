@@ -7,7 +7,7 @@ Trong đó nếu cụm từ đầu hoặc cuối đứng ngoài cùng có thể 
 
 ## Cài đặt
 
-Bấm vào đây để tải extension [https://addons.mozilla.org/firefox/downloads/file/4162639/1ae7bd4b5e8e49c494ae-0.0.0.1.xpi] 
+Tải file .xpi về vào phần quản lý extension chọn Install Addon from File...
 
 Sau đó vào Option để cài đặt các thiết lập và tải các từ điển lên rồi bấm nút Lưu.
 
