@@ -115,6 +115,9 @@ function loadOptions() {
 
 function saveData() {
     const request = indexedDB.open("QTlikedWebExt", 1);
+    document.querySelectorAll('#Options input').forEach((el) => {
+        if (el.id == 'optionDaucach') tmpOptions[el.id] = el.value; else tmpOptions[el.id] = el.checked;
+    });
     request.onsuccess = () => {
         dbase = request.result;
         let dickNames = Object.keys(tmpDicts);
@@ -124,6 +127,7 @@ function saveData() {
             });
         dbase.close();
         browser.runtime.sendMessage({ 'action': 'loadData', 'payload': '' })
+        window.close();
     }
 }
 
