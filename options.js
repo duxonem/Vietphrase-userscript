@@ -145,7 +145,7 @@ function saveData() {
             }
             timeoutfn();
         }
-        waitToClose(window.close, 250);
+        waitToClose(250);
     }
 }
 
