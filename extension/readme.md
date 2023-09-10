@@ -14,3 +14,4 @@ Sau đó vào Option để cài đặt các thiết lập và tải các từ đ
 #### Lưu ý:
 
 Các trình duyệt nhân chromium (Opera, Vivaldi...) tải file chromium.zip làm theo video hướng dẫn
+https://streamable.com/s2y9ye
