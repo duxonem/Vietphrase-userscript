@@ -14,7 +14,36 @@
 
     fieldset {
       flex-grow: 1;
+      flex-shrink: 1;
+      flex-basis: 30rem;
       min-width: 20em;
+      line-height: 1.6rem;
+    }
+
+    textarea {
+      width: 99%;
+      height: 4em;
+      resize: none;
+    }
+
+    input[type="checkbox"]+input[type="text"] {
+      color: gray;
+      pointer-events: none;
+    }
+
+    input[type="checkbox"]:checked+input[type="text"] {
+      color: revert;
+      pointer-events: revert;
+    }
+
+    input[type="checkbox"]+textarea {
+      color: gray;
+      pointer-events: none;
+    }
+
+    input[type="checkbox"]:checked+textarea {
+      color: revert;
+      pointer-events: revert;
     }
   </style>
 
@@ -24,157 +53,50 @@
   <div>
     <fieldset id="Options">
       <legend>Options</legend>
-      <div>
-        <input type="checkbox" id="optionNgoac" class="Options">Dùng ngoặc cho [Vietphrase]<br>
-        <input type="checkbox" id="optionMotnghia" class="Options">Vietphrase một nghĩa.
-        <br><span style="margin-left: 1.5em;">Dấu cách giữa các nghĩa <input type="text" size="4" id="optionDaucach"
-            placeholder="Vd: / ; |" class="Options"></span><br>
-        <input type="checkbox" id="optionSp" class="Options">Dùng StrucPhrase
-        <span><br><input type="checkbox" id="optionSpNgoac" class="Options" style="margin-left: 1.5em;">Dùng
-          ngoặc cho &lt;StrucPhrase&gt;
-        </span><br>
-        <input type="checkbox" id="optionXoaDich" class="Options">Xóa chữ Đích, Liễu, Trứ<br>
-      </div>
+
+      <input type="checkbox" id="optionNgoac" class="Options">Dùng ngoặc cho [Vietphrase]<br>
+      <input type="checkbox" id="optionMotnghia" class="Options">Vietphrase một nghĩa.
+      <br><span style="margin-left: 1.5em;">Dấu cách giữa các nghĩa <input type="text" size="4" id="optionDaucach"
+          placeholder="Vd: / ; |" class="Options"></span><br>
+      <input type="checkbox" id="optionSp" class="Options">Dùng StrucPhrase
+      <span><br><input type="checkbox" id="optionSpNgoac" class="Options" style="margin-left: 1.5em;">Dùng
+        ngoặc cho &lt;StrucPhrase&gt;
+      </span><br>
+      <input type="checkbox" id="optionXoaDich" class="Options">Xóa chữ Đích, Liễu, Trứ<br>
+      <input type="checkbox" id="optionThayfont" class="Options">Thay font mặc định bằng font <input type="text"
+        id="optionFont" class="Options" sixe="8" value="Roboto"><br>
+      <input type="checkbox" id="optionAutoTrans" class="Options">Xóa nút [Translate], tự động dịch ngoại trừ các
+      websites:
+      <textarea id="optionWebsites" class="Options" spellcheck="false">qidian.com</textarea>
+
     </fieldset>
 
-    <fieldset>
+    <fieldset id="Dicts">
       <legend title="Các từ điển này được lưu vào trình duyệt của bạn">Các từ điển cần thiết</legend>
+
       <div>
-        <div>
-          <span title="Bấm để tải từ điển từ máy tính của bạn"><label for="inFilePhienAm">Phiên Âm</label>
-            <input type="file" id="inFilePhienAm"></span>
-        </div>
+        <span title="Bấm để tải từ điển từ máy tính của bạn"><label for="inFileVP">Vietphrase</label>
+          <input type="file" id="inFileVP"></span>
+      </div>
 
-        <div>
-          <span title="Bấm để tải từ điển từ máy tính của bạn"><label for="inFileVP">Vietphrase</label>
-            <input type="file" id="inFileVP"></span>
-        </div>
+      <div>
+        <span title="Bấm để tải từ điển từ máy tính của bạn"><label for="inFileNames">Names</label>
+          <input type="file" id="inFileNames"></span>
+      </div>
 
-        <div>
-          <span title="Bấm để tải từ điển từ máy tính của bạn"><label for="inFileNames">Names</label>
-            <input type="file" id="inFileNames"></span>
-        </div>
+      <div>
+        <span title="Bấm để tải từ điển từ máy tính của bạn"><label for="inFilePhienAm">Phiên Âm</label>
+          <input type="file" id="inFilePhienAm"></span>
+      </div>
 
-        <div>
-          <span title="Bấm để tải từ điển từ máy tính của bạn"><label for="inFileStrucPhrase">StrucPhrase</label>
-            <input type="file" id="inFileStrucPhrase"></span>
-        </div>
+      <div>
+        <span title="Bấm để tải từ điển từ máy tính của bạn"><label for="inFileStrucPhrase">StrucPhrase</label>
+          <input type="file" id="inFileStrucPhrase"></span>
       </div>
     </fieldset>
   </div>
-  <button> Luu </button>
-  <!-- <script>
-    function readDict(e) {
-      e.files[0].text().then(data => {
-        switch (e.id) {
-          case 'inFilePhienAm': rawToDict(data).then(dict => tmpDicts['PhienAm'] = dict).catch(ee => console.log(ee)); break;
-          case 'inFileNames': rawToDict(data).then(dict => tmpDicts['Names'] = dict).catch(ee => console.log(ee)); break;
-          case 'inFileVP': rawToDict(data).then(dict => tmpDicts['VP'] = dict).catch(ee => console.log(ee)); break;
-          case 'inFileStrucPhrase': rawToDict(data).then(dict => tmpDicts['SP'] = dict).catch(ee => console.log(ee)); break;
-          default: console.error('error: No dick fond');
-        }
-      })
-    }
+  <button> Lưu </button>
 
-    function rawToDict(raw, sortCallback) {
-      return new Promise((resolve, reject) => {
-        let lines = String(raw).trim().split('\n');
-        let resultDict = { Han: [], HanViet: {} };
-
-        for (let i = 0; i < lines.length - 1; i++) {
-          if (lines[i].startsWith('//') || lines[i].startsWith('#')) continue; //Skip comment line
-          HanViet = lines[i].split('=');
-          if (HanViet.length != 2) continue;  //dinh dang sai hoac chua doc len het
-          HanViet[0] = HanViet[0].trim();
-          HanViet[1] = HanViet[1].trim();
-          if (HanViet[0] == '') continue;
-          resultDict.HanViet[HanViet[0]] = HanViet[1];
-        }
-        resultDict.Han = [...new Set(Object.keys(resultDict.HanViet))];
-        if (typeof sortCallback === 'function') resultDict.Han.sort(sortCallback);
-        else resultDict.Han.sort((b, a) => a.length - b.length || a.localeCompare(b));
-
-        if (resultDict.Han.length > 0) resolve(resultDict);
-        else reject('Error: Nodata');
-      });
-    }
-
-
-    function optionsToPage() {
-      if (JSON.stringify(tmpOptions) != JSON.stringify({})) {
-        Object.keys(tmpOptions).forEach(option => {
-          if (option != 'optionDaucach') $(option).checked = tmpOptions[option];
-          else $(option).value = tmpOptions[option];
-        })
-      }
-    }
-
-    function $(e) { return e ? document.getElementById(e) || document.querySelector(e) : false };
-
-    const indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB || window.shimIndexedDB;
-    function firstRun() {
-      let request = indexedDB.open(" QTlikedWebExt", 1); request.onupgradeneeded=()=> {
-    let dbase = request.result;
-    if (!dbase.objectStoreNames.contains("dataStore"))
-    dbase.createObjectStore("dataStore", { keyPath: 'name' });
-    // dbase.close();
-    }
-    request.onsuccess = () => {
-    let dbase = request.result;
-    if (!dbase.objectStoreNames.contains("dataStore"))
-    dbase.createObjectStore("dataStore", { keyPath: 'name' });
-    console.log('connect database successed');
-    dbase.close();
-    }
-    request.onerror = function (e) { console.log('Loi ', e.target.error); dbase.close(); }
-    }
-
-    function loadOptions() {
-    const request = indexedDB.open("QTlikedWebExt", 1);
-    request.onsuccess = () => {
-    dbase = request.result;
-    if (dbase.objectStoreNames.contains("dataStore"))
-    dbase.transaction('dataStore').objectStore('dataStore').get('Options').onsuccess = function (e) {
-    console.log(e.target.result);
-    dict = e.target.result;
-    tmpDicts[dict.name] = JSON.parse(dict.data);
-    tmpOptions = tmpDicts.Options;
-    optionsToPage();
-    }
-    dbase.close();
-    }
-    }
-
-    function loadData() {
-    const request = indexedDB.open("QTlikedWebExt", 1);
-    request.onsuccess = () => {
-    dbase = request.result;
-    if (dbase.objectStoreNames.contains("dataStore"))
-    dbase.transaction('dataStore').objectStore('dataStore').getAll().onsuccess = function (e) {
-    e.target.result.forEach(dict => tmpDicts[dict.name] = JSON.parse(dict.data))
-    tmpOptions = tmpDicts.Options;
-    }
-    dbase.close();
-    }
-    }
-
-    function saveData() {
-    const request = indexedDB.open("QTlikedWebExt", 1);
-    request.onsuccess = () => {
-    dbase = request.result;
-    let dickNames = Object.keys(tmpDicts);
-    dickNames.forEach(dictName =>
-    dbase.transaction('dataStore', 'readwrite').objectStore('dataStore').put({ name: dictName, data:
-    JSON.stringify(tmpDicts[dictName]) }).onsuccess = function (e) {
-    console.log(`save ${tmpDicts[dictName]} successfuly`);
-    });
-    dbase.close();
-    }
-    }
-
-    firstRun();
-    loadOptions();
-    </script> -->
 </body>
 
 </html>

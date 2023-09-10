@@ -1,22 +1,26 @@
 let dictPhienAm, dictNames, dictVP, dictSP;
 let Options;
 
-
-browser.runtime.onMessage.addListener(receiveMessage);
-
-function receiveMessage(message, sender) {
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    let payload;
     switch (message.action) {
         case 'translate': payload = translate(message.payload); break;
-        case 'loadData': loadData(); return;
-        case 'detectLanguage': break;
+        case 'loadData': { loadData(); payload = ''; return; }
+        case 'loadOptions': loadOptions().then(() => {
+            payload = Options;
+            sendResponse({ 'action': message.action, 'payload': payload });
+        });
+            return true;
         default: { }
     }
-    browser.tabs.sendMessage(sender.tab.id, { 'action': message.action, 'payload': payload });
-}
+    sendResponse({ 'action': message.action, 'payload': payload });
+    return true;
+});
+
 
 function translate(text) {
-    return VPTrans(strucTrans(text, true));
-    return VPTrans(text);
+    if (Options.optionSp) return VPTrans(strucTrans(text, Options.optionSpNgoac));
+    else return VPTrans(text);
 }
 
 function PhienAmTrans(text) {
@@ -25,7 +29,7 @@ function PhienAmTrans(text) {
 }
 
 function VPTrans(text, Ngoac = true, Motnghia = false, Daucach = ';', XoaDich = false) {
-    const DichLieuTru = ['dic', 'lieu', 'tru']
+    const DichLieuTru = ['的', '了', '著'];
     dictNames.Han.forEach(Han => text = text.replaceAll(Han, ` ${dictNames.HanViet[Han]}`));
     dictVP.Han.forEach((Han) => {
         let VP;
@@ -35,7 +39,7 @@ function VPTrans(text, Ngoac = true, Motnghia = false, Daucach = ';', XoaDich = 
         text = text.replaceAll(Han, ` ${VP}`)
     });
 
-    if (XoaDich) DichLieuTru.forEach(dich => text = text.replaceAll(dich, ''));
+    if (XoaDich) DichLieuTru.forEach(dich => text = text.replaceAll(dich, ' '));
 
     dictPhienAm.Han.forEach(Han => text = text.replaceAll(Han, ` ${dictPhienAm.HanViet[Han]}`));
     text = text.replaceAll(/(\s+)/g, ' ');
@@ -67,10 +71,7 @@ function strucTrans(text, Ngoac = true) {
                         matchCase[0] = subText;
                         break;
                     }
-                    if (k == 1) {
-                        skipThisStep = true;
-                        break;
-                    }
+                    if (k == 1) { skipThisStep = true; break; }
                 }
             }
 
@@ -84,10 +85,7 @@ function strucTrans(text, Ngoac = true) {
                         matchCase[0] = subText;
                         break;
                     }
-                    if (k == 1) {
-                        skipThisStep = true;
-                        break;
-                    }
+                    if (k == 1) { skipThisStep = true; break; }
                 }
             }
 
@@ -102,10 +100,7 @@ function strucTrans(text, Ngoac = true) {
                         matchCase[matchCase.length - 1] = subText;
                         break;
                     }
-                    if (k == 1) {
-                        skipThisStep = true;
-                        break;
-                    }
+                    if (k == 1) { skipThisStep = true; break; }
                 }
             }
 
@@ -119,26 +114,18 @@ function strucTrans(text, Ngoac = true) {
                         matchCase[matchCase.length - 1] = subText;
                         break; //if found then break
                     }
-                    if (k == 1) {
-                        skipThisStep = true;
-                        break;
-                    }
+                    if (k == 1) { skipThisStep = true; break; }
                 }
             }
-
             if (skipThisStep) return;
             let vText1 = vText;
             searchEl.forEach((el, index) => vText1 = vText1.replace(el, matchCase[index]))
             if (Ngoac) text = text.replaceAll(cMatch, `<${vText1}>`);
             else text = text.replaceAll(cMatch, vText1);
         })
-
     })
     return text;
 }
-
-
-// function $(e) { return e ? document.getElementById(e) || document.querySelector(e) : false };
 
 const indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB || window.shimIndexedDB;
 function firstRun() {
@@ -163,7 +150,6 @@ function firstRun() {
 function loadData() {
     const request = indexedDB.open("QTlikedWebExt", 1);
     let tmpDicts = {};
-
     return new Promise((resolve, reject) => {
         request.onsuccess = () => {
             dbase = request.result;
@@ -193,6 +179,27 @@ function loadData() {
     });
 }
 
-browser.runtime.onInstalled = () => { browser.tabs.create({ url: "options.html" }); };
+function loadOptions() {
+    const request = indexedDB.open("QTlikedWebExt", 1);
+    let tmpDicts = {};
+
+    return new Promise((resolve, reject) => {
+        request.onsuccess = () => {
+            dbase = request.result;
+            if (dbase.objectStoreNames.contains("dataStore")) {
+                let tt = dbase.transaction('dataStore').objectStore('dataStore').get('Options');
+                tt.onsuccess = function (e) {
+                    if (e.target.result == undefined) reject();
+                    else { Options = JSON.parse(e.target.result.data); resolve(); }
+                }
+                tt.onerror = () => reject();
+                dbase.close();
+            }
+        }
+        request.onerror = () => reject();
+    });
+}
+
+chrome.runtime.onInstalled = () => { chrome.tabs.create({ url: "options.html" }); };
 firstRun();
 loadData().then(() => console.log('Data loaded')).catch(() => console.log('Cannot load Data'));

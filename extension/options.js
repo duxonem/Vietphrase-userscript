@@ -1,7 +1,7 @@
 let tmpDicts = { Options: {} };
 let tmpOptions = tmpDicts.Options;
 function optionChange(t) {
-    if (t.target.id != 'optionDaucach') tmpOptions[t.target.id] = t.target.checked;
+    if (t.target.type == 'checkbox') tmpOptions[t.target.id] = t.target.checked;
     else tmpOptions[t.target.id] = t.value;
 }
 
@@ -40,14 +40,14 @@ function rawToDict(raw, sortCallback) {
     });
 }
 
-function sortStruc(a, b) {
+function sortStruc(b, a) {
     const reg = /{\d+}|{N\d?}|{V\d?}/g
     const arrA = a.match(reg);
     const arrB = b.match(reg);
-    if (a.length > b.length) return 1;
-    if (a.length < b.length) return -1;
-    let a1 = a2 = b1 = b2 = 0;
+    if (arrA.length > arrB.length) return 1;
+    if (arrA.length < arrB.length) return -1;
 
+    let a1 = a2 = b1 = b2 = 0;
     if (arrA[0].includes('N')) a1 += 2;
     if (arrA[0].includes('V')) a1 += 1;
     if (arrA.at(-1).includes('N')) a2 += 2;
@@ -62,16 +62,6 @@ function sortStruc(a, b) {
     if (a1 + a2 < b1 + b2) return -1;
 
     return a.length - b.length;
-}
-
-
-function optionsToPage() {
-    if (JSON.stringify(tmpOptions) != JSON.stringify({})) {
-        Object.keys(tmpOptions).forEach(option => {
-            if (option != 'optionDaucach') $(option).checked = tmpOptions[option];
-            else $(option).value = tmpOptions[option];
-        })
-    }
 }
 
 function $(e) { return e ? document.getElementById(e) || document.querySelector(e) : false };
@@ -96,6 +86,15 @@ function firstRun() {
     request.onerror = function (e) { console.log('Loi ', e.target.error); dbase.close(); }
 }
 
+function optionsToPage() {
+    if (JSON.stringify(tmpOptions) != JSON.stringify({})) {
+        Object.keys(tmpOptions).forEach(option => {
+            if ($(option).type == 'checkbox') $(option).checked = tmpOptions[option];
+            else $(option).value = tmpOptions[option];
+        })
+    }
+}
+
 function loadOptions() {
     const request = indexedDB.open("QTlikedWebExt", 1);
     request.onsuccess = () => {
@@ -115,23 +114,37 @@ function loadOptions() {
 
 function saveData() {
     const request = indexedDB.open("QTlikedWebExt", 1);
-    document.querySelectorAll('#Options input').forEach((el) => {
-        if (el.id == 'optionDaucach') tmpOptions[el.id] = el.value; else tmpOptions[el.id] = el.checked;
+    document.querySelectorAll('.Options').forEach((el) => {
+        if (el.type == 'checkbox') tmpOptions[el.id] = el.checked; else tmpOptions[el.id] = el.value;
     });
+
+    let count = 0;
     request.onsuccess = () => {
         dbase = request.result;
         let dickNames = Object.keys(tmpDicts);
-        dickNames.forEach(dictName =>
+        dickNames.forEach(dictName => {
+            count++;
             dbase.transaction('dataStore', 'readwrite').objectStore('dataStore').put({ name: dictName, data: JSON.stringify(tmpDicts[dictName]) }).onsuccess = function (e) {
                 console.log(`save ${tmpDicts[dictName]} successfuly`);
-            });
-        dbase.close();
-        browser.runtime.sendMessage({ 'action': 'loadData', 'payload': '' })
-        window.close();
+                count--;
+            }
+        });
+
+        let timeout;
+        waitToFinishSaving(100);
+
+        function waitToFinishSaving(delay) {
+            clearTimeout(timeout);
+            if (count == 0) {
+                dbase.close();
+                chrome.runtime.sendMessage({ 'action': 'loadData', 'payload': '' })  //Cap nhat Dicts cura background
+                window.close();
+            } else timeout = setTimeout(waitToFinishSaving, delay)
+        }
     }
 }
 
-document.querySelectorAll(".Options").forEach(t => t.addEventListener('change', optionChange));
+//document.querySelectorAll(".Options").forEach(t => t.addEventListener('change', optionChange));
 document.querySelectorAll("input[type='file']").forEach(t => t.addEventListener('change', readDict));
 document.querySelector("button").addEventListener('click', saveData);
 
