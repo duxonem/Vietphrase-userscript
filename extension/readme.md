@@ -13,4 +13,4 @@ Sau đó vào Option để cài đặt các thiết lập và tải các từ đ
 
 #### Lưu ý:
 
-Extension này viết cho Firefox, để chuyển qua chrome bạn mở các file .js lên, đổi các cụm từ browser.runtime thành chrome.runtime; browser.tabs thành chrome.tabs.
+Các trình duyệt nhân chromium (Opera, Vivaldi...) tải file chromium.zip làm theo video hướng dẫn
