@@ -33,12 +33,13 @@ function loadOptions() {
 
 let lang, percent;
 browser.i18n.detectLanguage(document.title).then(langInfo => {
+    if (document.getElementsByTagName('html')[0].getAttribute('lang')?.includes('zh')) lang='zh';
     let charset = document.querySelector('meta[charset]')?.getAttribute('charset').toLowerCase();
     if (charset == undefined || !charset.includes('gb')) {
         let metaContent = document.querySelector('meta[http-equiv="Content-Type"]')?.getAttribute('content')?.toLowerCase();
         if (metaContent?.includes('charset')) charset = metaContent.slice(metaContent.indexOf('charset=') + 8); else charset = '';
     }
-    if (charset.includes('gb')) lang = 'zh'; else
+    if (charset.includes('gb')||lang=='zh') lang = 'zh'; else
         langInfo.languages.forEach(l => {
             lang = l.language;
             percent = l.percentage;
