@@ -24,7 +24,7 @@ async function translateNode(rootNode) {
 
     let mess = await browser.runtime.sendMessage({ 'action': 'translate', 'payload': nodesText });
     let textArr = mess.payload.split(limiter);
-    textArr.forEach((text, index) => nodeArr[index].textContent = text);
+    textArr.forEach((text, index) => {if (nodeArr[index]) nodeArr[index].textContent = text}); 
 }
 
 function loadOptions() {
