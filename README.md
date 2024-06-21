@@ -7,8 +7,7 @@ https://raw.githubusercontent.com/duxonem/Vietphrase-userscript/main/vietphraseT
 
 Sau khi chạy thành công, sẽ hiện 1 nút ở góc trên bên phải. Sau khi mở trang tiếng Trung, muốn chuyển qua dạng Vietphrase đọc đươc thì nhấn phần nút bên trái, nhấn bên phải để chạy kiểu khác.  
 
-Đây là hình ví dụ trên PC
-![image](https://user-images.githubusercontent.com/128269506/226879528-99b43031-a266-4e19-b2cf-c437e5c25d57.png)
+![1](https://github.com/duxonem/Vietphrase-userscript/assets/128269506/6861c924-0584-43f3-a3ff-2b53c4b44bcc)
 
-Đây là hình ví dụ trên Firefox Nightly Android
-![VP Trans userscript](https://user-images.githubusercontent.com/128269506/227080869-048d5a9a-b2d2-4e79-8ea5-a200db91a32c.jpg)
+![2](https://github.com/duxonem/Vietphrase-userscript/assets/128269506/46434eec-8e3d-4a64-8564-6b206db45d2e)
+
