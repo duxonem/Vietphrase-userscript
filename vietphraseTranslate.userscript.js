@@ -9,7 +9,6 @@
 // @match  http*://*/*
 // @grant  GM_setValue
 // @grant  GM_getValue
-// @grant  GM_deleteValue
 // @run-at   document-idle
 // ==/UserScript==
 
@@ -27,8 +26,6 @@ let dictNames = GM_getValue('dictNames', undefined);
 let dictVP = GM_getValue('dictVP', undefined);
 let dictPA = GM_getValue('dictPA', undefined);
 let dictSP = GM_getValue('dictSP', undefined);
-
-// let {dictNames,dictVP,dictPA, dictSP} = GM_getValues({dictNames:undefined,dictVP:undefined,dictPA:undefined, dictSP:undefined});
 
 let tmpDictPA;
 let tmpDictVP;
@@ -101,7 +98,6 @@ function str2Dict(str) {
   return dict
 }
 
-
 function transPA(str) {
   return str.split('').reduce((s, c) => s += dictPA.trans[c] ? (' ' + dictPA.trans[c]) : c, '');
 }
@@ -156,9 +152,8 @@ function translateNode(rootNode) {
     if (node.nodeType == 3) {
       nodeArr.push(node);
       nodesText += node.textContent + limiter;
-      // nodesText += node.nodeValue + limiter;
     }
-    node.childNodes.forEach((childNode) => nodeToArr(childNode))
+    node.childNodes.forEach(childNode => nodeToArr(childNode))
   }
 
   nodeToArr(rootNode);
@@ -169,13 +164,12 @@ function translateNode(rootNode) {
       nodeArr[index].textContent = text;
     });
     if (Options.font)
-      document.querySelector('body').setAttribute('style', `font-family: ${Options.font} !important;`);
+      document.body.setAttribute('style', `font-family: ${Options.font} !important;`);
   }
   else {
     translated.split(limiter).forEach((text, index) => {
       if (nodeArr[index] == undefined) return;
       nodeArr[index].textContent = text;
-      // nodeArr[index].nodeValue = text;
       if (Options.font) nodeArr[index].parentElement ? nodeArr[index].parentElement.style = `font-family: ${Options.font} !important` : '';
 
       let el = findNonInline(nodeArr[index].parentElement);
@@ -226,12 +220,12 @@ function addNewSite(ev) {
   const me = ev.target;
   const match = me.matches('#usDialog li:last-of-type>input[type="text"]');
   if (!me.value && match)
-    return; //last line and empty, do nothing
+    return;
   if (!me.value && !match)
-    me.parentElement.remove(); //empty but not the last, remove
-  if (me.value && match)  //the last and not empty, add new item
+    me.parentElement.remove();
+  if (me.value && match)
     document.querySelector('#usDialog ul').insertAdjacentHTML('beforeend', `
-        <li><input type="text"> Trái <input type="checkbox" checked> Phải | <input type="checkbox"> Xóa nút</li>`);
+            <li><input type="text"> Trái <input type="checkbox" checked> Phải | <input type="checkbox"> Xóa nút</li>`);
   document.querySelector('#usDialog li:last-of-type>input[type="text"]').addEventListener("change", addNewSite);
 }
 
@@ -239,6 +233,7 @@ function addNewSite(ev) {
   'use strict';
   if (window.self != window.top) return;
   if (Options.blackList?.split(/[,;]/).some(e => e.trim() && window.location.host.includes(e.trim()))) return;
+  document.addEventListener('click', reFlow);
   const auto = Options.whiteList.filter(e => window.location.host.includes(e.host));
   if (auto.length > 0) {
     if (auto[0].leftRight) rightFunc(); else leftFunc();
@@ -251,231 +246,226 @@ function addNewSite(ev) {
         observer.observe(document.body, { childList: true, subtree: true });
       } else return;
   }
-  document.addEventListener('click', reFlow);
 
   document.body.insertAdjacentHTML('beforeend', `
-    <style>
-      div.usButton {
-        display: flex;
-        position: fixed;
-        top: 1%;
-        right: 1%;
-        margin: 0;
-        padding: 0;
-        border: thin;
-        z-index: 9999;
-      }
-     
-      div.usButton>button {
-        height: 90%;
-        border: none;
-        margin: 0;
-        text-align: right;
-      }
-     
-      div.usButton>button:first-child {
-      padding: 5px 0px 5px 5px;
-      }
-     
-      div.usButton>button:last-child {
-        padding: 5px 2px 5px 0px;
-      }
-     
-      div.usButton>button:nth-child(2) {
-        padding: 5px 2px 5px 0px;
-      }
-     
-      dialog#usDialog {
-        border: none;
-        border-radius: .3rem;
-        font-family: Arial;
-        padding: .3rem;
-        margin: auto;
-        min-width: 20rem;
-        width: fit-content;
-      }
-     
-      #usDialog>div {
-        display: flex;
-        justify-content: space-around;
-      }
-     
-      #usDialog label:has(#cbMotnghia)+label {
-        display: none;
-      }
-     
-      #usDialog label:has(#cbMotnghia:checked)+label {
-        display: unset;
-      }
-     
-      #usDialog nav>label {
-        width: 4.5rem;
-        display: inline-block;
-        border-radius: 3px 3px 0px 0px;
-        border: 1px solid black;
-        border-bottom: none;
-        text-align: center;
-      }
-     
-      #usDialog nav>label:has(input[type="radio"]:checked) {
-        font-weight: 700;
-      }
-     
-      #usDialog input[type="radio"] {
-        width: 0px;
-        height: 0px;
-        display: none;
-      }
-     
-      #usDialog fieldset {
-        display: none;
-        min-height: 14rem;
-        text-align: left;
-        min-width:fit-content;
-      }
-     
-      #usDialog input[type="text"] {
-        border: 1px solid black;
-        padding:0;
-      }
-     
-      #usDialog textarea {
-        border: 1px solid black;
-      }
-     
-      #usDialog nav:has(#rdTudien:checked)~fieldset:nth-child(2) {
-        display: block;
-      }
-     
-      #usDialog nav:has(#rdDich:checked)~fieldset:nth-child(3) {
-        display: block;
-      }
-     
-      #usDialog nav:has(#rdTudong:checked)~fieldset:nth-child(4) {
-        display: grid;
-      }
-     
-      #usDialog ul {
-        box-sizing: border-box;
-        padding: 0;
-        margin: 0;
-        max-height: 6rem;
-        overflow-y: scroll;
-      }
-     
-      #usDialog li {
-        display: unset;
-        padding: 0;
-        margin: 0;
-        display:block;
-      }
-     
-      #usDialog li>label {
-        display: inline-block;
-        position: relative;
-        border-radius: 1em;
-        width: 2em;
-        height: 1em;
-        background-color: pink;
-      }
-     
-      #usDialog li>label:has(input[type="checkbox"])::before {
-        content: '';
-        display: unset;
-        position: absolute;
-        left: .15em;
-        top: .1em;
-        border-radius: 50%;
-        width: .8em;
-        height: .8em;
-        background-color: rgb(193, 6, 245);
-      }
-     
-      #usDialog li>label:has(input[type="checkbox"]:checked)::before {
-        display: none;
-      }
-     
-      #usDialog li>label:has(input[type="checkbox"])::after {
-        display: none;
-      }
-     
-      #usDialog li>label:has(input[type="checkbox"]:checked)::after {
-        content: '';
-        display: unset;
-        position: absolute;
-        border-radius: 50%;
-        right: .15em;
-        top: .1em;
-        width: .8em;
-        height: .8em;
-        background-color: green;
-      }
-     
-      #usDialog li>label>input[type="checkbox"] {
-        width: 0px;
-        height: 0px;
-        display: none;
-      }
-     
-      #usDialog button{
-        min-width:fit-content;
-        width: 4rem;
-      }
-    </style>
-    <div class="usButton">
-      <button>Tran</button>
-      <button>slate</button>
-      <button>↓</button>
-    </div>
-    <dialog id="usDialog" spellcheck="false" lang="vie">
-      <nav>
-        <label id="tudien"><input type="radio" name="groupby" id="rdTudien" checked>Từ điển</label>
-        <label id="cachdich"><input type="radio" name="groupby" id="rdDich">Dịch</label>
-        <label id="tudong"><input type="radio" name="groupby" id="rdTudong">Tự động</label>
-      </nav>
-      <fieldset>
-        <label for="fPA">Phiên Âm&nbsp;&nbsp;&nbsp;<input type="file" id="fPA"></label><br />
-        <label for="fVP">Vietphrase&nbsp;<input type="file" id="fVP"></label><br />
-        <label for="fNames">Names&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="file" id="fNames"></label><br />
-        <label for="fSP">Strucphrase<input type="file" id="fSP"></label><br />
-      </fieldset>
-      <fieldset>
-        <label for="cbNgoac"><input type="checkbox" id="cbNgoac"> Dùng [ngoặc]</label><br />
-        <label for="cbMotnghia"><input type="checkbox" id="cbMotnghia"> Một nghĩa</label>
-        <label for="txtdaucach">, dấu cách nghĩa<input type="text" id="txtdaucach" size="1" maxlength="1"></label><br />
-        <label for="cbDichLieu"><input type="checkbox" id="cbDichLieu"> Xóa "đích, liễu, trứ"</label><br />
-        <label for="cbSP"><input type="checkbox" id="cbSP"> Dùng Strucphrase</label><br />
-      </fieldset>
-      <fieldset>
-        <label for="txtfont" style="width:100%">Font thay thế: </label><input type="text" id="txtfont">
-        <label for="txtWL" style="width:100%">Các site tự chạy: </label>
-        <ul>
-        </ul>
-        <label for="txtBL" style="width:100%">Bỏ qua các tên miền chứa các chuỗi cách nhau bằng , ;</label>
-        <textarea id="txtBL">.vn;</textarea>
-      </fieldset>
-      <div>
-        <button>OK</button>
-        <button>Cancel</button>
-      </div>
-    </dialog>`);
+        <style>
+          div.usButton {
+            display: flex;
+            position: fixed;
+            top: 1%;
+            right: 1%;
+            margin: 0;
+            padding: 0;
+            border: thin;
+            z-index: 9999;
+          }
+         
+          div.usButton>button {
+            height: 90%;
+            border: none;
+            margin: 0;
+            text-align: right;
+          }
+         
+          div.usButton>button:first-child {
+          padding: 5px 0px 5px 5px;
+          }
+         
+          div.usButton>button:last-child {
+            padding: 5px 2px 5px 0px;
+          }
+         
+          div.usButton>button:nth-child(2) {
+            padding: 5px 2px 5px 0px;
+          }
+         
+          dialog#usDialog {
+            border: none;
+            border-radius: .3rem;
+            font-family: Arial;
+            padding: .3rem;
+            margin: auto;
+            min-width: 20rem;
+            width: fit-content;
+          }
+         
+          #usDialog>div {
+            display: flex;
+            justify-content: space-around;
+          }
+         
+          #usDialog label:has(#cbMotnghia)+label {
+            display: none;
+          }
+         
+          #usDialog label:has(#cbMotnghia:checked)+label {
+            display: unset;
+          }
+         
+          #usDialog nav>label {
+            width: 4.5rem;
+            display: inline-block;
+            border-radius: 3px 3px 0px 0px;
+            border: 1px solid black;
+            border-bottom: none;
+            text-align: center;
+          }
+         
+          #usDialog nav>label:has(input[type="radio"]:checked) {
+            font-weight: 700;
+          }
+         
+          #usDialog input[type="radio"] {
+            width: 0px;
+            height: 0px;
+            display: none;
+          }
+         
+          #usDialog fieldset {
+            display: none;
+            min-height: 14rem;
+            text-align: left;
+            min-width:fit-content;
+          }
+         
+          #usDialog input[type="text"] {
+            border: 1px solid black;
+            padding:0;
+          }
+         
+          #usDialog textarea {
+            border: 1px solid black;
+          }
+         
+          #usDialog nav:has(#rdTudien:checked)~fieldset:nth-child(2) {
+            display: block;
+          }
+         
+          #usDialog nav:has(#rdDich:checked)~fieldset:nth-child(3) {
+            display: block;
+          }
+         
+          #usDialog nav:has(#rdTudong:checked)~fieldset:nth-child(4) {
+            display: grid;
+          }
+         
+          #usDialog ul {
+            box-sizing: border-box;
+            padding: 0;
+            margin: 0;
+            max-height: 6rem;
+            overflow-y: scroll;
+          }
+         
+          #usDialog li {
+            display: unset;
+            padding: 0;
+            margin: 0;
+            display:block;
+          }
+         
+          #usDialog li>label {
+            display: inline-block;
+            position: relative;
+            border-radius: 1em;
+            width: 2em;
+            height: 1em;
+            background-color: pink;
+          }
+         
+          #usDialog li>label:has(input[type="checkbox"])::before {
+            content: '';
+            display: unset;
+            position: absolute;
+            left: .15em;
+            top: .1em;
+            border-radius: 50%;
+            width: .8em;
+            height: .8em;
+            background-color: rgb(193, 6, 245);
+          }
+         
+          #usDialog li>label:has(input[type="checkbox"]:checked)::before {
+            display: none;
+          }
+         
+          #usDialog li>label:has(input[type="checkbox"])::after {
+            display: none;
+          }
+         
+          #usDialog li>label:has(input[type="checkbox"]:checked)::after {
+            content: '';
+            display: unset;
+            position: absolute;
+            border-radius: 50%;
+            right: .15em;
+            top: .1em;
+            width: .8em;
+            height: .8em;
+            background-color: green;
+          }
+         
+          #usDialog li>label>input[type="checkbox"] {
+            width: 0px;
+            height: 0px;
+            display: none;
+          }
+         
+          #usDialog button{
+            min-width:fit-content;
+            width: 4rem;
+          }
+        </style>
+        <div class="usButton">
+          <button>Tran</button>
+          <button>slate</button>
+          <button>↓</button>
+        </div>
+        <dialog id="usDialog" spellcheck="false" lang="vie">
+          <nav>
+            <label id="tudien"><input type="radio" name="groupby" id="rdTudien" checked>Từ điển</label>
+            <label id="cachdich"><input type="radio" name="groupby" id="rdDich">Dịch</label>
+            <label id="tudong"><input type="radio" name="groupby" id="rdTudong">Tự động</label>
+          </nav>
+          <fieldset>
+            <label for="fPA">Phiên Âm&nbsp;&nbsp;&nbsp;<input type="file" id="fPA"></label><br />
+            <label for="fVP">Vietphrase&nbsp;<input type="file" id="fVP"></label><br />
+            <label for="fNames">Names&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="file" id="fNames"></label><br />
+            <label for="fSP">Strucphrase<input type="file" id="fSP"></label><br />
+          </fieldset>
+          <fieldset>
+            <label for="cbNgoac"><input type="checkbox" id="cbNgoac"> Dùng [ngoặc]</label><br />
+            <label for="cbMotnghia"><input type="checkbox" id="cbMotnghia"> Một nghĩa</label>
+            <label for="txtdaucach">, dấu cách nghĩa<input type="text" id="txtdaucach" size="1" maxlength="1"></label><br />
+            <label for="cbDichLieu"><input type="checkbox" id="cbDichLieu"> Xóa "đích, liễu, trứ"</label><br />
+            <label for="cbSP"><input type="checkbox" id="cbSP"> Dùng Strucphrase</label><br />
+          </fieldset>
+          <fieldset>
+            <label for="txtfont" style="width:100%">Font thay thế: </label><input type="text" id="txtfont">
+            <label for="txtWL" style="width:100%">Các site tự chạy: </label>
+            <ul>
+            </ul>
+            <label for="txtBL" style="width:100%">Bỏ qua các tên miền chứa các chuỗi cách nhau bằng , ;</label>
+            <textarea id="txtBL">.vn;</textarea>
+          </fieldset>
+          <div>
+            <button>OK</button>
+            <button>Cancel</button>
+          </div>
+        </dialog>`);
 
   const dialog = document.querySelector('dialog#usDialog');
 
   function leftFunc() {
-    console.time('Translate 1');
     document.title = transPA(document.title);
     document.body.innerHTML = transVP(document.body.innerHTML, Options.Ngoac, Options.Motnghia, Options.daucach, Options.DichLieu);
     if (Options.font)
-      document.querySelector('body').setAttribute('style', `font-family: ${Options.font} !important;`);
-    console.timeEnd('Translate 1');
+      document.body.setAttribute('style', `font-family: ${Options.font} !important;`);
   }
 
   function rightFunc() {
-    console.time('Translate 2');
     document.title = transPA(document.title);
     translateNode(document.body);
-    console.timeEnd('Translate 2');
   }
 
   document.querySelector('.usButton button:first-child').onclick = leftFunc;
@@ -503,11 +493,11 @@ function addNewSite(ev) {
     [...Array.isArray(Options.whiteList) ? Options.whiteList : []].forEach(el => {
       if (!el || !el.host) return;
       ul.insertAdjacentHTML('beforeend', `
-        <li><input type="text" value="${el.host}" > Trái <label><input type="checkbox" ${el.leftRight ? 'checked' : ''}></label> Phải | <input type="checkbox" ${el.noButton ? 'checked' : ''}> Xóa nút</li>`);
+            <li><input type="text" value="${el.host}" > Trái <label><input type="checkbox" ${el.leftRight ? 'checked' : ''}></label> Phải | <input type="checkbox" ${el.noButton ? 'checked' : ''}> Xóa nút</li>`);
     });
 
     dialog.querySelector('ul').insertAdjacentHTML('beforeend', `
-        <li><input type="text"> Trái <label><input type="checkbox" checked></label> Phải | <input type="checkbox"> Xóa nút</li>`);
+            <li><input type="text"> Trái <label><input type="checkbox" checked></label> Phải | <input type="checkbox"> Xóa nút</li>`);
     dialog.querySelectorAll('li input[type="text"]').forEach(el => el.addEventListener('change', addNewSite));
 
     dialog.querySelector('#txtBL').value = Options.blackList ?? '';
