@@ -11,10 +11,8 @@ Chọn nút ↓ để tải các từ điển lên, ít nhất phải có Phiên
 ![1](https://github.com/duxonem/Vietphrase-userscript/assets/128269506/6861c924-0584-43f3-a3ff-2b53c4b44bcc)
 
 #### Sau khi mở trang tiếng Trung, muốn chuyển qua dạng Vietphrase đọc bấm nút Convert ở góc trên bên phải trang web.
-![2](https://github.com/duxonem/Vietphrase-userscript/assets/128269506/46434eec-8e3d-4a64-8564-6b206db45d2e)
 
 ### Mục tự động để script chạy tự động ở các host do bạn chọn mà không cần bấm nút để convert. Trong đó:
 - Font là để thay thế font mặc định của trang web do các font chữ trung khi hiện tiếng Việt có thể sẽ không đẹp.
 - các host sẽ tự động convert, bạn không cần phải bấm nút mỗi lần qua trang mới trên host đó.
 - cuối cùng là các host sẽ không chạy hoặc hiện nút do không cần convert, ví dụ các trang có đuôi ".vn" chắc chắn không cần do là tiếng Việt.
-![3](https://greasyfork.s3.us-east-2.amazonaws.com/tveisyhbs4rd3nwd1ja31ccuuvti)
