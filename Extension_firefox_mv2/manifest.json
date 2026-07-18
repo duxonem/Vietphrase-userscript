@@ -1,0 +1,27 @@
+{
+  "manifest_version": 2,
+  "name": "Vietphrase Converter Pro",
+  "version": "2.2.0",
+  "description": "Convert văn bản tiếng Trung kiểu Vietphrase, tối ưu bằng IndexedDB và cơ chế Batch-Translate.",
+  "permissions": [
+    "storage",
+    "http://*/*",
+    "https://*/*"
+  ],
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": true
+  },
+  "content_scripts": [
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
+  },
+  "browser_action": {}
+}

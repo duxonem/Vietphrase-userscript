@@ -1,0 +1,22 @@
+{
+  "manifest_version": 3,
+  "name": "Vietphrase Converter",
+  "version": "2.2.0",
+  "description": "Convert văn bản tiếng Trung kiểu Vietphrase",
+  "permissions": [
+    "storage"
+  ],
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["content.js"],
+      "run_at": "document_end"
+    }
+  ],
+  "options_page": "options.html",
+  "action": {}
+}
