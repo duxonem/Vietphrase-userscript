@@ -1,0 +1,27 @@
+{
+  "manifest_version": 3,
+  "name": "Vietphrase Converter MV3",
+  "version": "2.2.0",
+  "description": "Convert văn bản tiếng Trung kiểu Vietphrase",
+  "permissions": [
+    "storage"
+  ],
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "content_scripts": [
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["content.js"],
+      "run_at": "document_end"
+    }
+  ],
+  "options_page": "options.html",
+  "action": {},
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "vietphrase-converter@yourdomain.com",
+      "strict_min_version": "120.0"
+    }
+  }
+}
